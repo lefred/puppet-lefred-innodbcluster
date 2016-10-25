@@ -9,7 +9,7 @@ Example
 Hiera example with 3 nodes:
 
 hieradata/common.yaml
-.....................
+*********************
 
 ```
 ---
@@ -23,7 +23,7 @@ innodbcluster::seed: mysql1
 ```
 
 hieradata/mysql1.yaml
-.....................
+*********************
 
 ```
 ---
@@ -35,7 +35,7 @@ classes:
 
 
 hieradata/mysql2.yaml
-.....................
+*********************
 
 ```
 ---
@@ -47,7 +47,7 @@ classes:
 
 
 hieradata/mysql3.yaml
-.....................
+*********************
 
 ```
 ---
