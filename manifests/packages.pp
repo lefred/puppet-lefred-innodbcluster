@@ -1,4 +1,4 @@
-class innodbcluster::packages ( $versionpack="5.7.18-1.1.el7", $buildtag="commerciala", $shellversion="1.0.6-0.1.el7" ) {
+class innodbcluster::packages ( $versionpack="5.7.18-1.1.el7", $buildtag="commercial", $shellversion="1.0.6-0.1.el7" ) {
 
         exec {
 		swap_packages:
