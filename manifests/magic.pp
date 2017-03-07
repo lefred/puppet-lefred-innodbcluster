@@ -16,7 +16,7 @@ class innodbcluster::magic {
         unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
         require    => Class['Innodbcluster::Grant'];
     "check_instance_state":
-        command => "mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.checkInstanceState('$user@$ip:3306','$password')\"",
+        command => "mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.checkInstanceState('$user@$ip:3306','$password')\"; echo 0 >/dev/null",
         logoutput  => true,
         path       => ['/bin', '/usr/bin'],
         unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
