@@ -43,7 +43,7 @@ class innodbcluster::config {
         	path    => $my_file,
             ensure  => present,
             content => template("innodbcluster/my.cnf.erb"),
-		    require => Package["mysql-$buildtag-server"];
+		    require => Package["mysql-community-server"];
     "hosts":
         	path    => "/etc/hosts",
             ensure  => present,
@@ -55,7 +55,7 @@ class innodbcluster::config {
  	"initialize_mysql":
                 path    => ['/sbin', '/usr/bin', '/bin'],
                 unless  => "test -f /var/lib/mysql/ibdata1",
-                require => [ Package["mysql-$buildtag-server"], Exec["hostname"], File["hosts"] ],
+                require => [ Package["mysql-community-server"], Exec["hostname"], File["hosts"] ],
                 command => "mysqld --initialize-insecure -u mysql --datadir /var/lib/mysql";
  }
 
