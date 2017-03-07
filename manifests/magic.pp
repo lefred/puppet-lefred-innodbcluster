@@ -16,7 +16,7 @@ class innodbcluster::magic {
         unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
         require    => Class['Innodbcluster::Grant'];
     "check_instance_state":
-        command => "mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.checkInstanceState('$user@$ip:3306','$password')\"; echo 0",
+        command => "mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.checkInstanceState('$user@$ip:3306','$password')\"",
         logoutput  => true,
         path       => ['/bin', '/usr/bin'],
         unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
@@ -38,7 +38,7 @@ class innodbcluster::magic {
 
      exec {
         "add_instance":
-           command => "mysql --defaults-file=/root/.my.cnf -BN -e 'reset master' && mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.addInstance('$user@$ip:3306',{passwordu: '$password'})\"",
+           command => "mysql --defaults-file=/root/.my.cnf -BN -e 'reset master' && mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.addInstance('$user@$ip:3306',{password: '$password'})\"",
            logoutput  => true,
            unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
            path    => ['/bin', '/usr/bin'],
