@@ -38,7 +38,7 @@ class innodbcluster::magic {
 
      exec {
         "add_instance":
-           command => "mysql --defaults-file=/root/.my.cnf -BN -e 'reset master' && mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.addInstance('$user@$ip:3306',{password: '$password'})\"; echo 0",
+           command => "mysql --defaults-file=/root/.my.cnf -BN -e 'reset master' && mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.addInstance('$user@$ip:3306',{passwordu: '$password'})\"",
            logoutput  => true,
            unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
            path    => ['/bin', '/usr/bin'],
