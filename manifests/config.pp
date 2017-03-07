@@ -3,8 +3,6 @@ class innodbcluster::config {
  $root_password = $innodbcluster::mysql_root_password
  $old_root_password = $innodbcluster::mysql_old_root_password
 
- $buildtag = $innodbcluster::packages::buildtag
-
  if $root_password != undef {
    case $old_root_password {
      undef   : { $old_pwd = '' }
