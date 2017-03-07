@@ -9,12 +9,18 @@ class innodbcluster::magic {
   # if seed, create cluster if it's not yet existing
 
   exec {
-    "check_instance":
-        command    => "mysqlsh -e 'print(dba.checkInstanceConfig(\"$user@$ip:3306\",{password:\"$password\"}))'  | grep \"status.*ok\"",
+    "check_instance_config":
+        command    => "mysqlsh -e 'print(dba.checkInstanceConfiguration(\"$user@$ip:3306\",{password:\"$password\"}))'  | grep \"status.*ok\"",
         logoutput  => true,
         path       => ['/bin', '/usr/bin'],
         unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
-        require    => Class['Innodbcluster::Grant']
+        require    => Class['Innodbcluster::Grant'];
+    "check_instance_state":
+        command => "mysqlsh --uri $user:$password@$seed:3306 -e \"cluster=dba.getCluster('$clustername'); cluster.checkInstanceState('$user@$ip:3306','$password')\"; echo 0",
+        logoutput  => true,
+        path       => ['/bin', '/usr/bin'],
+        unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
+        require    => Exec['check_instance_config']
   }
 
   if  $seed == $hostname or $seed == $ip {
@@ -25,7 +31,7 @@ class innodbcluster::magic {
            command => "mysqlsh --uri $user:$password@$ip:3306 -e \"dba.createCluster('$clustername')\"",
            unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
            path    => ['/bin', '/usr/bin'],
-           require => Exec[ "check_instance"]
+           require => Exec[ "check_instance_config"]
      }
   } else {
      info ("This node needs to join a cluster")
@@ -36,7 +42,7 @@ class innodbcluster::magic {
            logoutput  => true,
            unless  => "mysqlsh --uri $user:$password@$ip:3306 -e \"print(dba.getCluster('$clustername'))\" | grep '^<Cluster'",
            path    => ['/bin', '/usr/bin'],
-           require => Exec[ "check_instance"]
+           require => Exec[ "check_instance_state"]
      }
 
   }
