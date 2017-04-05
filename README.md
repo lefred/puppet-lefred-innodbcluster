@@ -57,7 +57,7 @@ classes:
     innodbcluster::mysql_serverid:  3
 ```
 
-
+I really encourage you to encrypt the passwords using hiera-eyaml in the hiera files
 
 
 
